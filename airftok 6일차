@@ -1,0 +1,19 @@
+import os
+
+import cv2
+import numpy as np
+form matpoltlib import pyplot as plt
+
+IMG_PATH = "../images"
+
+if __name__ == "__main__":
+    img = cv2.imread(os.path.join(IMG_PATH, "lena.ipeg"), cv2.IMREAD_GRYSCALE)
+    
+    hist, bins = np.histogram(img.flatten(), 256, [0, 256])
+    
+    cdf = hist.cumsum()
+    
+    cdf_m = np.ma.masked_equal(cdf, 0)
+    cdf_m = (cdf_m - cdf_m.min)()) * 255 / (cdf_m.max() - cdf_m.min())
+    cdf = np.ma.filled(cdf_m, 0)
+    
